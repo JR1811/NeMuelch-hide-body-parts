@@ -1,0 +1,6 @@
+{
+  "feedback.bodypart.removed": "Entry removed",
+  "feedback.bodypart.removed.all": "Removed all entries",
+  "feedback.bodypart.added": "Entry added",
+  "feedback.bodypart.error": "Failed to change entry"
+}

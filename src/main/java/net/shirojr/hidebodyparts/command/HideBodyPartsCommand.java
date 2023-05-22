@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class HideBodyPartsCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
-        dispatcher.register(CommandManager.literal("nemuelch").requires(source -> source.hasPermissionLevel(2))
+        dispatcher.register(CommandManager.literal("hide").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.literal("bodyPart")
                         .then(CommandManager.literal("changeEntry")
                                 .then(CommandManager.argument("bodyPartName", StringArgumentType.word())
@@ -44,17 +44,17 @@ public class HideBodyPartsCommand {
                 if (Objects.equals(entry.getBodyPartName(), bodyPartInput)) {
                     if (partExistsInNbt(persistentData, entry)) {
                         persistentData.remove(entry.getBodyPartName());
-                        context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.removed"), true);
+                        context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.removed"), true);
                     } else {
-                        persistentData.putString(entry.getBodyPartName(), context.getSource().getName());   //TODO: get a better list of strings nbt structure
-                        context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.added"), true);
+                        persistentData.putString(entry.getBodyPartName(), context.getSource().getName());
+                        context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.added"), true);
                     }
 
                     return 1;
                 }
             }
 
-            context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.error"), true);
+            context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.error"), true);
             return -1;
         });
     }
@@ -72,7 +72,7 @@ public class HideBodyPartsCommand {
                     persistentData.remove(entry.getBodyPartName());
                 }
             }
-            context.getSource().sendFeedback(new TranslatableText("feedback.nemuelch.bodypart.removed.all"), true);
+            context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.removed.all"), true);
             return 1;
         });
     }
