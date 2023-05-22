@@ -1,4 +1,4 @@
-# Hide Body Parts
+# Hide Body Parts <img src="https://github.com/JR1811/hide-body-parts-fabric/assets/36027822/846db018-1f7d-4ea8-8dae-773da0377be2"  width="35" height="35">
 
 Utility mod for Fabric Minecraft.
 
