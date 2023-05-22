@@ -15,9 +15,6 @@
 	"icon": "assets/hide-body-parts/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"preLaunch": [
-			"net.shirojr.hidebodyparts.HideBodyPartsPreLaunch"
-		],
 		"main": [
 			"net.shirojr.hidebodyparts.HideBodyParts"
 		]

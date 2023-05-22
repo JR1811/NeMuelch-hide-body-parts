@@ -9,6 +9,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.shirojr.hidebodyparts.HideBodyParts;
 import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -57,14 +58,14 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements IBod
 		NbtCompound hiddenParts = this.dataTracker.get(HIDDEN_BODYPARTS);
 
 		if (!hiddenParts.isEmpty()) {
-			nbt.put("nbt.nemuelch.missing_bodypart", hiddenParts);
+			nbt.put(HideBodyParts.NBT_KEY, hiddenParts);
 		}
 	}
 
 	@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
 	protected void nemuelch$injectCustomReadNbt(NbtCompound nbt, CallbackInfo ci) {
-		if (nbt.contains("nbt.nemuelch.missing_bodypart")) {
-			this.dataTracker.set(HIDDEN_BODYPARTS, nbt.getCompound("nbt.nemuelch.missing_bodypart"));
+		if (nbt.contains(HideBodyParts.NBT_KEY)) {
+			this.dataTracker.set(HIDDEN_BODYPARTS, nbt.getCompound(HideBodyParts.NBT_KEY));
 		}
 	}
 }

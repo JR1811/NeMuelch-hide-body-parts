@@ -12,6 +12,8 @@ public class HideBodyParts implements ModInitializer {
     public static final String MOD_ID = "hide-body-parts";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    public static final String NBT_KEY = "hidebodyparts.missing_part";
+
     @Override
     public void onInitialize() {
         HideBodyPartsEvents.registerEvents();

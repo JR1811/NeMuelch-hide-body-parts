@@ -12,7 +12,7 @@ base {
 
 repositories {
 	// LlamaLad7's MixinExtras
-	maven { url 'https://jitpack.io' }
+	// maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -24,7 +24,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// LlamaLad7's MixinExtras
-	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
+	// include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.1.1")))
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 }
