@@ -25,4 +25,4 @@ Currently availble Bodyparts:
 
 Toggle body parts: `/hide bodyPart changeEntry bodyPartName target`
 
-Reset all bofy parts to visible: `/hide bodyPart removeAllEntries target`
+Reset all body parts to visible: `/hide bodyPart removeAllEntries target`
