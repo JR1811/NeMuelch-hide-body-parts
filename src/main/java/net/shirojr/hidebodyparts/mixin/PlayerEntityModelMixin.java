@@ -41,9 +41,9 @@ public abstract class PlayerEntityModelMixin extends LivingEntityRenderer<Abstra
         if (nbt.contains(BodyParts.HEAD.getBodyPartName())) {
             this.model.head.visible = false;
         }
-        if (nbt.contains(BodyParts.HAT.getBodyPartName())) {
+        /*if (nbt.contains(BodyParts.HAT.getBodyPartName())) {
             this.model.hat.visible = false;
-        }
+        }*/
         if (nbt.contains(BodyParts.BODY.getBodyPartName())) {
             this.model.body.visible = false;
         }
