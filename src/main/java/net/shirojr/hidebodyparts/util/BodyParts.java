@@ -1,8 +1,9 @@
 package net.shirojr.hidebodyparts.util;
 
 public enum BodyParts {
+
+    // HAT("hat"),
     HEAD("head"),
-    HAT("hat"),
     BODY("body"),
     RIGHT_ARM("r_arm"),
     LEFT_ARM("l_arm"),
@@ -11,7 +12,7 @@ public enum BodyParts {
 
     private final String bodyPart;
 
-    private BodyParts(String bodyPart) {
+    BodyParts(String bodyPart) {
         this.bodyPart = bodyPart;
     }
 
