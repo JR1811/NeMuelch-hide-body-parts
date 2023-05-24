@@ -26,3 +26,12 @@ Currently availble Bodyparts:
 Toggle body parts: `/hide bodyPart changeEntry bodyPartName target`
 
 Reset all body parts to visible: `/hide bodyPart removeAllEntries target`
+
+---
+
+### Official Release pages
+
+- [Github](https://github.com/JR1811/hide-body-parts-fabric/releases)
+- [Modrinth](https://modrinth.com/mod/hide-body-parts)
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/hide-body-parts)
+
