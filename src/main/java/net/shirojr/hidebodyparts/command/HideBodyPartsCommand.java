@@ -4,18 +4,19 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.shirojr.hidebodyparts.util.BodyParts;
 import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
 
 import java.util.Objects;
 
 public class HideBodyPartsCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(CommandManager.literal("hide").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.literal("bodyPart")
                         .then(CommandManager.literal("changeEntry")
@@ -44,17 +45,17 @@ public class HideBodyPartsCommand {
                 if (Objects.equals(entry.getBodyPartName(), bodyPartInput)) {
                     if (partExistsInNbt(persistentData, entry)) {
                         persistentData.remove(entry.getBodyPartName());
-                        context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.removed"), true);
+                        context.getSource().sendFeedback(Text.translatable("feedback.bodypart.removed"), true);
                     } else {
                         persistentData.putString(entry.getBodyPartName(), context.getSource().getName());
-                        context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.added"), true);
+                        context.getSource().sendFeedback(Text.translatable("feedback.bodypart.added"), true);
                     }
 
                     return 1;
                 }
             }
 
-            context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.error"), true);
+            context.getSource().sendFeedback(Text.translatable("feedback.bodypart.error"), true);
             return -1;
         });
     }
@@ -72,7 +73,7 @@ public class HideBodyPartsCommand {
                     persistentData.remove(entry.getBodyPartName());
                 }
             }
-            context.getSource().sendFeedback(new TranslatableText("feedback.bodypart.removed.all"), true);
+            context.getSource().sendFeedback(Text.translatable("feedback.bodypart.removed.all"), true);
             return 1;
         });
     }
