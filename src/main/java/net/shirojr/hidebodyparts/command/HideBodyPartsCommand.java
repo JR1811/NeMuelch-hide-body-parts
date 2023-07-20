@@ -31,7 +31,10 @@ public class HideBodyPartsCommand {
                                                 .executes(HideBodyPartsCommand::run))))
                         .then(CommandManager.literal("removeAllEntries")
                                 .then(CommandManager.argument("target", EntityArgumentType.player())
-                                        .executes(HideBodyPartsCommand::runRemoval))))
+                                        .executes(HideBodyPartsCommand::runRemoval)))
+                        .then(CommandManager.literal("addAllEntries")
+                                .then(CommandManager.argument("target", EntityArgumentType.player())
+                                        .executes(HideBodyPartsCommand::runAddAllEntries))))
         );
     }
 
@@ -60,10 +63,6 @@ public class HideBodyPartsCommand {
         });
     }
 
-    private static boolean partExistsInNbt(NbtCompound nbt, BodyParts entry) {
-        return nbt.contains(entry.getBodyPartName());
-    }
-
     private static int runRemoval(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
 
@@ -76,5 +75,23 @@ public class HideBodyPartsCommand {
             context.getSource().sendFeedback(Text.translatable("feedback.bodypart.removed.all"), true);
             return 1;
         });
+    }
+
+    private static int runAddAllEntries(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
+
+        return targetPlayer.editPersistentData(persistentData -> {
+            for (var entry : BodyParts.values()) {
+                if (!persistentData.contains(entry.getBodyPartName())) {
+                    persistentData.putString(entry.getBodyPartName(), context.getSource().getName());
+                }
+            }
+            context.getSource().sendFeedback(Text.translatable("feedback.bodypart.added.all"), true);
+            return 1;
+        });
+    }
+
+    private static boolean partExistsInNbt(NbtCompound nbt, BodyParts entry) {
+        return nbt.contains(entry.getBodyPartName());
     }
 }
