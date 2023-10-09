@@ -8,8 +8,8 @@ import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
 public class HideBodyPartsPlayerEventCopyFrom implements ServerPlayerEvents.CopyFrom {
     @Override
     public void copyFromPlayer(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
-        ((IBodyPartSaver)oldPlayer).editPersistentData(nbtCompound ->
-                ((IBodyPartSaver)newPlayer).editPersistentData(player -> {
+        ((IBodyPartSaver)oldPlayer).hidebodyparts$editPersistentData(nbtCompound ->
+                ((IBodyPartSaver)newPlayer).hidebodyparts$editPersistentData(player -> {
                     for (var entry : BodyParts.values()) {
                         if (nbtCompound.contains(entry.getBodyPartName())) {
                             player.putString(entry.getBodyPartName(),

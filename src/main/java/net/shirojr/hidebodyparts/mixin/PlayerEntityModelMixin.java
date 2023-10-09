@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.shirojr.hidebodyparts.util.BodyParts;
 import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -24,11 +25,12 @@ public abstract class PlayerEntityModelMixin extends LivingEntityRenderer<Abstra
 
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"))
-    public void render(AbstractClientPlayerEntity clientPlayer, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        NbtCompound nbt = ((IBodyPartSaver)clientPlayer).getPersistentData();
+    public void hidebodyparts$render(AbstractClientPlayerEntity clientPlayer, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
+        NbtCompound nbt = ((IBodyPartSaver)clientPlayer).hidebodyparts$getPersistentData();
         setVisible(nbt);
     }
 
+    @Unique
     protected void setVisible(NbtCompound nbt) {
         this.model.head.visible = true;
         this.model.hat.visible = true;
