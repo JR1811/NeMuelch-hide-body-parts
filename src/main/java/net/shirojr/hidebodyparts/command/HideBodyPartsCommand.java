@@ -40,7 +40,7 @@ public class HideBodyPartsCommand {
         IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
         IBodyPartSaver source = (IBodyPartSaver) context.getSource().getPlayer();
 
-        return targetPlayer.editPersistentData(persistentData -> {
+        return targetPlayer.hidebodyparts$editPersistentData(persistentData -> {
             for (var entry : BodyParts.values()) {
                 if (Objects.equals(entry.getBodyPartName(), bodyPartInput)) {
                     if (partExistsInNbt(persistentData, entry)) {
@@ -67,7 +67,7 @@ public class HideBodyPartsCommand {
     private static int runRemoval(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
 
-        return targetPlayer.editPersistentData(persistentData -> {
+        return targetPlayer.hidebodyparts$editPersistentData(persistentData -> {
             for (var entry : BodyParts.values()) {
                 if (persistentData.contains(entry.getBodyPartName())) {
                     persistentData.remove(entry.getBodyPartName());
