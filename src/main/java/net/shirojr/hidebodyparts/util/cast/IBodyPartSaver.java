@@ -5,9 +5,9 @@ import net.minecraft.nbt.NbtCompound;
 import java.util.function.Function;
 
 public interface IBodyPartSaver {
-    NbtCompound getPersistentData();
+    NbtCompound hidebodyparts$getPersistentData();
 
-    <T> T editPersistentData(Function<NbtCompound, T> action);
+    <T> T hidebodyparts$editPersistentData(Function<NbtCompound, T> action);
 
     record Wrapper(NbtCompound nbt) {}
 }
