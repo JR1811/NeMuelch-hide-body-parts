@@ -36,8 +36,8 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements IBod
 	}
 
 	@Inject(method = "initDataTracker", at = @At("TAIL"))
-	protected void hidebodyparts$initDataTracker(CallbackInfo ci) {
-		this.dataTracker.startTracking(HIDDEN_BODYPARTS, new NbtCompound());
+	protected void hidebodyparts$initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
+		builder.add(HIDDEN_BODYPARTS, new NbtCompound());
 	}
 
 	@Override
