@@ -45,17 +45,17 @@ public class HideBodyPartsCommand {
                 if (Objects.equals(entry.getBodyPartName(), bodyPartInput)) {
                     if (partExistsInNbt(persistentData, entry)) {
                         persistentData.remove(entry.getBodyPartName());
-                        context.getSource().sendFeedback(Text.translatable("feedback.bodypart.removed"), true);
+                        context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.removed"), true);
                     } else {
                         persistentData.putString(entry.getBodyPartName(), context.getSource().getName());
-                        context.getSource().sendFeedback(Text.translatable("feedback.bodypart.added"), true);
+                        context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.added"), true);
                     }
 
                     return 1;
                 }
             }
 
-            context.getSource().sendFeedback(Text.translatable("feedback.bodypart.error"), true);
+            context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.error"), true);
             return -1;
         });
     }
@@ -73,7 +73,7 @@ public class HideBodyPartsCommand {
                     persistentData.remove(entry.getBodyPartName());
                 }
             }
-            context.getSource().sendFeedback(Text.translatable("feedback.bodypart.removed.all"), true);
+            context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.removed.all"), true);
             return 1;
         });
     }
