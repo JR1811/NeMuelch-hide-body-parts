@@ -2,7 +2,7 @@ package net.shirojr.hidebodyparts;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.shirojr.hidebodyparts.command.HideBodyPartsCommand;
 import net.shirojr.hidebodyparts.event.HideBodyPartsEvents;
 import org.slf4j.Logger;
@@ -18,5 +18,6 @@ public class HideBodyParts implements ModInitializer {
     public void onInitialize() {
         HideBodyPartsEvents.registerEvents();
         CommandRegistrationCallback.EVENT.register(HideBodyPartsCommand::register);
+        LOGGER.info("Ooops, there goes my spleen...");
     }
 }

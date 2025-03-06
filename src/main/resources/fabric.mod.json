@@ -5,7 +5,8 @@
 	"name": "Hide Body Parts",
 	"description": "Hide Player Body parts using NBT data!",
 	"authors": [
-		"Me!"
+		"DEV - ShiroJR1811",
+		"DEV - 0xJoeMama"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -23,12 +24,9 @@
 		"hide-body-parts.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.14.19",
-		"minecraft": "~1.18.2",
-		"java": ">=17",
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
