@@ -18,6 +18,9 @@
 	"entrypoints": {
 		"main": [
 			"net.shirojr.hidebodyparts.HideBodyParts"
+		],
+		"client": [
+			"net.shirojr.hidebodyparts.HideBodyPartsClient"
 		]
 	},
 	"mixins": [

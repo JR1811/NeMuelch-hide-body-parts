@@ -1,15 +1,17 @@
 package net.shirojr.hidebodyparts.mixin;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.world.World;
-import net.shirojr.hidebodyparts.HideBodyParts;
+import net.shirojr.hidebodyparts.network.packet.PlayerEntitySyncPacket;
+import net.shirojr.hidebodyparts.util.BodyPart;
 import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.function.Function;
+import java.util.HashSet;
+import java.util.function.Consumer;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityDataMixin extends LivingEntity implements IBodyPartSaver {
@@ -28,45 +31,53 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements IBod
     public abstract void remove(Entity.RemovalReason reason);
 
     @Unique
-    @SuppressWarnings("WrongEntityDataParameterClass")
-    private static final TrackedData<NbtCompound> HIDDEN_BODYPARTS = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+    private final HashSet<BodyPart> invisibleParts = new HashSet<>();
 
     protected PlayerEntityDataMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    @Inject(method = "initDataTracker", at = @At("TAIL"))
-    protected void hidebodyparts$initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
-        builder.add(HIDDEN_BODYPARTS, new NbtCompound());
+    @Override
+    public HashSet<BodyPart> hidebodyparts$getInvisibleParts() {
+        return new HashSet<>(this.invisibleParts);
     }
 
     @Override
-    public NbtCompound hidebodyparts$getPersistentData() {
-        return getDataTracker().get(HIDDEN_BODYPARTS);
+    public void hidebodyparts$modifyInvisibleParts(Consumer<HashSet<BodyPart>> consumer) {
+        consumer.accept(this.invisibleParts);
+        if (this.getWorld().isClient()) return;
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        new PlayerEntitySyncPacket(player.getId(), this.invisibleParts).sendPacket(player, PlayerLookup.tracking(player));
     }
 
     @Override
-    public <T> T hidebodyparts$editPersistentData(Function<NbtCompound, T> action) {
-        var wrapper = this.hidebodyparts$getPersistentData().copy();
-
-        T result = action.apply(wrapper);
-        this.dataTracker.set(HIDDEN_BODYPARTS, wrapper);
-        return result;
+    public void hidebodyparts$modifyInvisiblePartsForNewEntity(int entityId, Consumer<HashSet<BodyPart>> consumer) {
+        consumer.accept(this.invisibleParts);
+        if (this.getWorld().isClient()) return;
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        new PlayerEntitySyncPacket(player.getId(), this.invisibleParts).sendPacket(entityId, player, PlayerLookup.tracking(player));
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     protected void hidebodyparts$injectCustomWriteNbt(NbtCompound nbt, CallbackInfo ci) {
-        NbtCompound hiddenParts = this.dataTracker.get(HIDDEN_BODYPARTS);
-
-        if (!hiddenParts.isEmpty()) {
-            nbt.put(HideBodyParts.NBT_KEY, hiddenParts);
+        NbtList bodyPartList = new NbtList();
+        for (BodyPart part : this.hidebodyparts$getInvisibleParts()) {
+            bodyPartList.add(NbtString.of(part.asString()));
         }
+        nbt.put("invisibleParts", bodyPartList);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
     protected void hidebodyparts$injectCustomReadNbt(NbtCompound nbt, CallbackInfo ci) {
-        if (nbt.contains(HideBodyParts.NBT_KEY)) {
-            this.dataTracker.set(HIDDEN_BODYPARTS, nbt.getCompound(HideBodyParts.NBT_KEY));
-        }
+        NbtList bodyPartList = nbt.getList("invisibleParts", NbtElement.STRING_TYPE);
+        HashSet<BodyPart> set = new HashSet<>();
+        bodyPartList.forEach(nbtElement -> {
+            BodyPart part = BodyPart.fromName(nbtElement.asString());
+            if (part != null) set.add(part);
+        });
+        hidebodyparts$modifyInvisibleParts(bodyParts -> {
+            bodyParts.clear();
+            bodyParts.addAll(set);
+        });
     }
 }

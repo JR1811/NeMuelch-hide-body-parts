@@ -1,13 +1,14 @@
 package net.shirojr.hidebodyparts.util.cast;
 
-import net.minecraft.nbt.NbtCompound;
+import net.shirojr.hidebodyparts.util.BodyPart;
 
-import java.util.function.Function;
+import java.util.HashSet;
+import java.util.function.Consumer;
 
 public interface IBodyPartSaver {
-    NbtCompound hidebodyparts$getPersistentData();
+    HashSet<BodyPart> hidebodyparts$getInvisibleParts();
 
-    <T> T hidebodyparts$editPersistentData(Function<NbtCompound, T> action);
+    void hidebodyparts$modifyInvisibleParts(Consumer<HashSet<BodyPart>> invisibleBodyPartsConsumer);
 
-    record Wrapper(NbtCompound nbt) {}
+    void hidebodyparts$modifyInvisiblePartsForNewEntity(int entityId, Consumer<HashSet<BodyPart>> invisibleBodyPartsConsumer);
 }

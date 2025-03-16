@@ -1,10 +1,15 @@
 package net.shirojr.hidebodyparts.event;
 
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.shirojr.hidebodyparts.event.custom.HideBodyPartsPlayerEventCopyFrom;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.shirojr.hidebodyparts.command.HideBodyPartsCommand;
+import net.shirojr.hidebodyparts.event.custom.PlayerUpdateEvents;
 
 public class HideBodyPartsEvents {
     public static void registerEvents() {
-        ServerPlayerEvents.COPY_FROM.register(new HideBodyPartsPlayerEventCopyFrom());
+        ServerPlayerEvents.COPY_FROM.register(PlayerUpdateEvents::registerCopyData);
+        ServerPlayConnectionEvents.JOIN.register(PlayerUpdateEvents::registerPlayerJoin);
+        CommandRegistrationCallback.EVENT.register(HideBodyPartsCommand::register);
     }
 }
