@@ -47,6 +47,10 @@ jar {
 	}
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/hide-body-parts.accesswidener")
+}
+
 // configure the maven publication
 publishing {
 	publications {

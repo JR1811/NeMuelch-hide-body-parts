@@ -1,4 +1,4 @@
-package net.shirojr.hidebodyparts.mixin;
+package net.shirojr.hidebodyparts.mixin.client;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;

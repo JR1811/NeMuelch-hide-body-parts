@@ -9,6 +9,7 @@
     "defaultRequire": 1
   },
   "client": [
-    "PlayerEntityModelMixin"
+    "client.HeldItemRendererMixin",
+    "client.PlayerEntityModelMixin"
   ]
 }

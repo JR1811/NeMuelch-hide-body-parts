@@ -1,20 +1,21 @@
 package net.shirojr.hidebodyparts.util;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.util.StringIdentifiable;
 import org.jetbrains.annotations.Nullable;
 
-public enum BodyPart implements StringIdentifiable {
+import java.util.List;
 
-    // HAT("hat"),
-    HEAD("head"),
-    BODY("body"),
-    RIGHT_ARM("r_arm"),
-    LEFT_ARM("l_arm"),
-    RIGHT_LEG("r_leg"),
-    LEFT_LEG("l_leg");
+public enum BodyPart implements StringIdentifiable {
+    HEAD("head", PlayerModelPart.HAT),
+    BODY("body", PlayerModelPart.CAPE, PlayerModelPart.JACKET),
+    RIGHT_ARM("r_arm", PlayerModelPart.RIGHT_SLEEVE),
+    LEFT_ARM("l_arm", PlayerModelPart.LEFT_SLEEVE),
+    RIGHT_LEG("r_leg", PlayerModelPart.RIGHT_PANTS_LEG),
+    LEFT_LEG("l_leg", PlayerModelPart.LEFT_PANTS_LEG);
 
     @SuppressWarnings("unused")
     public static final Codec<BodyPart> CODEC = Codec.STRING.xmap(BodyPart::valueOf, BodyPart::name);
@@ -23,14 +24,20 @@ public enum BodyPart implements StringIdentifiable {
     );
 
     private final String bodyPart;
+    private final List<PlayerModelPart> secondLayer;
 
-    BodyPart(String bodyPart) {
+    BodyPart(String bodyPart, PlayerModelPart... secondLayer) {
         this.bodyPart = bodyPart;
+        this.secondLayer = List.of(secondLayer);
     }
 
     @Override
     public String asString() {
         return this.bodyPart;
+    }
+
+    public List<PlayerModelPart> getSecondLayer() {
+        return secondLayer;
     }
 
     @Nullable

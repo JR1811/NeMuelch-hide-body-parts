@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.world.World;
 import net.shirojr.hidebodyparts.network.packet.PlayerEntitySyncPacket;
+import net.shirojr.hidebodyparts.render.PlayerModelPartHandler;
 import net.shirojr.hidebodyparts.util.BodyPart;
 import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,6 +48,7 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements IBod
         consumer.accept(this.invisibleParts);
         if (this.getWorld().isClient()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
+        PlayerModelPartHandler.setSecondLayerState(this.invisibleParts);
         new PlayerEntitySyncPacket(player.getId(), this.invisibleParts).sendPacket(player, PlayerLookup.tracking(player));
     }
 
