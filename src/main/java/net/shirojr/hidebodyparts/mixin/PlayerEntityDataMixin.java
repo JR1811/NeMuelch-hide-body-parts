@@ -26,8 +26,6 @@ import java.util.function.Consumer;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityDataMixin extends LivingEntity implements IBodyPartSaver {
-    // private NbtCompound persistentData;
-
     @Shadow
     public abstract void remove(Entity.RemovalReason reason);
 
@@ -46,14 +44,17 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements IBod
     @Override
     public void hidebodyparts$modifyInvisibleParts(Consumer<HashSet<BodyPart>> consumer) {
         consumer.accept(this.invisibleParts);
-        if (this.getWorld().isClient()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
-        PlayerModelPartHandler.setSecondLayerState(this.invisibleParts);
-        new PlayerEntitySyncPacket(player.getId(), this.invisibleParts).sendPacket(player, PlayerLookup.tracking(player));
+        if (player.getWorld().isClient()) {
+            PlayerModelPartHandler.setSecondLayerState(this.invisibleParts);
+        } else {
+            new PlayerEntitySyncPacket(player.getId(), this.invisibleParts).sendPacket(player, PlayerLookup.tracking(player));
+        }
     }
 
     @Override
     public void hidebodyparts$modifyInvisiblePartsForNewEntity(int entityId, Consumer<HashSet<BodyPart>> consumer) {
+        //FIXME: unused
         consumer.accept(this.invisibleParts);
         if (this.getWorld().isClient()) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
