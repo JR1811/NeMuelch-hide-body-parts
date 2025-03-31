@@ -1,0 +1,65 @@
+package net.shirojr.hidebodyparts.mixin;
+
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.shirojr.hidebodyparts.api.BodyPartHider;
+import net.shirojr.hidebodyparts.util.BodyPart;
+import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.function.Predicate;
+
+@Mixin(LivingEntity.class)
+public abstract class LivingEntityMixin {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    @Shadow
+    public abstract boolean areItemsDifferent(ItemStack stack, ItemStack stack2);
+
+    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;areItemsDifferent(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
+    private void adjustHiddenPartsFromEquipmentStack(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir,
+                                                     @Local EquipmentSlot equipmentSlot,
+                                                     @Local(ordinal = 0) ItemStack oldStack, @Local(ordinal = 1) ItemStack newStack) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity.getWorld().isClient()) return;
+        if (!(entity instanceof BodyPartSaver saver)) return;
+        if (!areItemsDifferent(oldStack, newStack)) return;
+        HashSet<BodyPart> hiddenParts = saver.hidebodyparts$getInvisibleParts();
+
+        if (oldStack.getItem() instanceof BodyPartHider hider) {
+            if (equipmentSlot.getType().equals(EquipmentSlot.Type.HUMANOID_ARMOR)) {
+                Predicate<BodyPart> wearingPartsPredicate = bodyPart -> hider.hideOnWearing(entity, equipmentSlot).contains(bodyPart);
+                if (hiddenParts.stream().anyMatch(wearingPartsPredicate)) {
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnWearing(entity, equipmentSlot)));
+                }
+            } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
+                Hand hand = equipmentSlot.equals(EquipmentSlot.OFFHAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
+                Predicate<BodyPart> holdingPartsPredicate = bodyPart -> hider.hideOnHolding(entity, hand).contains(bodyPart);
+                if (hiddenParts.stream().anyMatch(holdingPartsPredicate)) {
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnHolding(entity, hand)));
+                }
+            }
+        }
+
+        if (newStack.getItem() instanceof BodyPartHider hider) {
+            if (equipmentSlot.getType().equals(EquipmentSlot.Type.HUMANOID_ARMOR)) {
+                if (!hiddenParts.containsAll(hider.hideOnWearing(entity, equipmentSlot))) {
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnWearing(entity, equipmentSlot)));
+                }
+            } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
+                Hand hand = equipmentSlot.equals(EquipmentSlot.OFFHAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
+                if (!hiddenParts.containsAll(hider.hideOnHolding(entity, hand))) {
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnHolding(entity, hand)));
+                }
+            }
+        }
+    }
+}

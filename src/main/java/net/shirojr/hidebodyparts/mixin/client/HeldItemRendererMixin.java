@@ -9,7 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.shirojr.hidebodyparts.util.BodyPart;
-import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
+import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,7 +45,7 @@ public abstract class HeldItemRendererMixin {
     private boolean disabledEntry(Arm arm) {
         ClientPlayerEntity clientPlayer = client.player;
         if (clientPlayer == null) return false;
-        HashSet<BodyPart> invisibleParts = ((IBodyPartSaver) clientPlayer).hidebodyparts$getInvisibleParts();
+        HashSet<BodyPart> invisibleParts = ((BodyPartSaver) clientPlayer).hidebodyparts$getInvisibleParts();
 
         if (arm.equals(Arm.LEFT) && invisibleParts.contains(BodyPart.LEFT_ARM)) {
             return true;

@@ -11,7 +11,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.shirojr.hidebodyparts.HideBodyParts;
 import net.shirojr.hidebodyparts.util.BodyPart;
-import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
+import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public record PlayerEntitySyncPacket(int entityId, HashSet<BodyPart> parts) impl
 
     public void handlePacket(ClientPlayNetworking.Context context) {
         ClientWorld world = context.player().clientWorld;
-        if (world == null || !(world.getEntityById(entityId) instanceof IBodyPartSaver player)) return;
+        if (world == null || !(world.getEntityById(entityId) instanceof BodyPartSaver player)) return;
         player.hidebodyparts$modifyInvisibleParts(bodyParts -> {
             bodyParts.clear();
             bodyParts.addAll(parts);

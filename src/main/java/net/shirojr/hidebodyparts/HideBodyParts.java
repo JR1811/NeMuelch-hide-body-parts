@@ -3,6 +3,8 @@ package net.shirojr.hidebodyparts;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import net.shirojr.hidebodyparts.event.HideBodyPartsEvents;
+import net.shirojr.hidebodyparts.init.HideBodyPartsItemGroups;
+import net.shirojr.hidebodyparts.init.HideBodyPartsItems;
 import net.shirojr.hidebodyparts.network.HideBodyPartsPayloads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,8 @@ public class HideBodyParts implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        HideBodyPartsItems.initialize();
+        HideBodyPartsItemGroups.initialize();
         HideBodyPartsEvents.registerEvents();
         HideBodyPartsPayloads.initialize();
 

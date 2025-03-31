@@ -3,5 +3,10 @@
   "feedback.bodypart.removed.all": "Removed all entries",
   "feedback.bodypart.added": "Entry added",
   "feedback.bodypart.added.all": "Added all entries",
-  "feedback.bodypart.error": "Failed to change entry"
+  "feedback.bodypart.error": "Failed to change entry",
+
+  "itemgroup.hide_body_parts.hide_body_parts": "Hide Body Parts",
+
+  "item.hide_body_parts.holding_debug": "Holding Debug Item",
+  "item.hide_body_parts.wearing_debug": "Wearing Debug Item"
 }

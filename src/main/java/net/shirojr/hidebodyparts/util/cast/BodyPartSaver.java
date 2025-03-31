@@ -5,7 +5,7 @@ import net.shirojr.hidebodyparts.util.BodyPart;
 import java.util.HashSet;
 import java.util.function.Consumer;
 
-public interface IBodyPartSaver {
+public interface BodyPartSaver {
     HashSet<BodyPart> hidebodyparts$getInvisibleParts();
 
     void hidebodyparts$modifyInvisibleParts(Consumer<HashSet<BodyPart>> invisibleBodyPartsConsumer);

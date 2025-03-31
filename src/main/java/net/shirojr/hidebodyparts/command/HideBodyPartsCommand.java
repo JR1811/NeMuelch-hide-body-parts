@@ -12,7 +12,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.shirojr.hidebodyparts.util.BodyPart;
-import net.shirojr.hidebodyparts.util.cast.IBodyPartSaver;
+import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +51,7 @@ public class HideBodyPartsCommand {
         String bodyPartInput = StringArgumentType.getString(context, "bodyPartName");
         BodyPart selectedPart = BodyPart.fromName(bodyPartInput);
         if (selectedPart == null) throw INVALID_PART.create();
-        IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
+        BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
 
         targetPlayer.hidebodyparts$modifyInvisibleParts(invisibleParts -> {
             if (!invisibleParts.remove(selectedPart)) {
@@ -62,14 +62,14 @@ public class HideBodyPartsCommand {
     }
 
     private static int runRemoveAllEntries(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
+        BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
         targetPlayer.hidebodyparts$modifyInvisibleParts(HashSet::clear);
         context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.removed.all"), true);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int runEnableAllEntries(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        IBodyPartSaver targetPlayer = (IBodyPartSaver) EntityArgumentType.getPlayer(context, "target");
+        BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
         targetPlayer.hidebodyparts$modifyInvisibleParts(bodyParts -> bodyParts.addAll(Set.of(BodyPart.values())));
         context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.added.all"), true);
         return Command.SINGLE_SUCCESS;
