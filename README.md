@@ -23,6 +23,8 @@ Toggle body parts: `/hide bodyPart changeEntry bodyPartName target`
 
 Reset all body parts to visible: `/hide bodyPart removeAllEntries target`
 
+Still need an example of how the NBT is structured in-game? Use the previously mentioned commands to disable a body part and use minecraft's
+`/data get entity @p invisibleParts` command to inspect the listed nbt values of the disabled body parts.
 
 <div style="text-align: center;">
 <br>
