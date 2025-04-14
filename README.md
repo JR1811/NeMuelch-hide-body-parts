@@ -4,7 +4,7 @@ Utility mod for Fabric Minecraft.
 
 ## Usage
 
-Use the `invisibleParts` NBT compound list on players entity to hide their body parts.
+Use the `invisibleParts` NBT compound list on a player entity to hide their body parts.
 
 Currently availble Bodyparts:
 
