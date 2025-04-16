@@ -8,7 +8,7 @@ import net.shirojr.hidebodyparts.event.custom.PlayerUpdateEvents;
 
 public class HideBodyPartsEvents {
     public static void registerEvents() {
-        ServerPlayerEvents.COPY_FROM.register(PlayerUpdateEvents::registerCopyData);
+        ServerPlayerEvents.AFTER_RESPAWN.register(PlayerUpdateEvents::registerCopyData);
         ServerPlayConnectionEvents.JOIN.register(PlayerUpdateEvents::registerPlayerJoin);
         CommandRegistrationCallback.EVENT.register(HideBodyPartsCommand::register);
     }

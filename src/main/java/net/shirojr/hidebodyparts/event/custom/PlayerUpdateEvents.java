@@ -10,11 +10,10 @@ import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 
 public class PlayerUpdateEvents {
     public static void registerCopyData(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer, boolean alive) {
-        BodyPartSaver oldPartsOfPlayer = ((BodyPartSaver) oldPlayer);
-        BodyPartSaver newPartsOfPlayer = ((BodyPartSaver) newPlayer);
-        newPartsOfPlayer.hidebodyparts$modifyInvisibleParts(bodyParts -> {
+        if (!(oldPlayer instanceof BodyPartSaver oldParts) || !(newPlayer instanceof BodyPartSaver newParts)) return;
+        newParts.hidebodyparts$modifyInvisibleParts(bodyParts -> {
             bodyParts.clear();
-            bodyParts.addAll(oldPartsOfPlayer.hidebodyparts$getInvisibleParts());
+            bodyParts.addAll(oldParts.hidebodyparts$getInvisibleParts());
         });
     }
 
