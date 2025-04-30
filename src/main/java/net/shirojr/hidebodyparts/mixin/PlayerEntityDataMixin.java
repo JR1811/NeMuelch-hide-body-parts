@@ -1,6 +1,5 @@
 package net.shirojr.hidebodyparts.mixin;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -9,8 +8,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
-import net.shirojr.hidebodyparts.network.packet.PlayerEntitySyncPacket;
+import net.shirojr.hidebodyparts.network.HideBodyPartsNetworkingUtil;
 import net.shirojr.hidebodyparts.render.PlayerModelPartHandler;
 import net.shirojr.hidebodyparts.util.BodyPart;
 import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
@@ -45,10 +45,10 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements Body
     public void hidebodyparts$modifyInvisibleParts(Consumer<HashSet<BodyPart>> consumer) {
         consumer.accept(this.invisibleParts);
         PlayerEntity player = (PlayerEntity) (Object) this;
-        if (player.getWorld().isClient()) {
+        if (!(player instanceof ServerPlayerEntity serverPlayer)) {
             PlayerModelPartHandler.setSecondLayerState(this.invisibleParts);
         } else {
-            new PlayerEntitySyncPacket(player.getId(), this.invisibleParts).sendPacket(player, PlayerLookup.tracking(player));
+            HideBodyPartsNetworkingUtil.sendPlayerEntitySyncToTracking(serverPlayer, this.invisibleParts);
         }
     }
 
@@ -56,9 +56,8 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements Body
     public void hidebodyparts$modifyInvisiblePartsForNewEntity(int entityId, Consumer<HashSet<BodyPart>> consumer) {
         //FIXME: unused
         consumer.accept(this.invisibleParts);
-        if (this.getWorld().isClient()) return;
-        PlayerEntity player = (PlayerEntity) (Object) this;
-        new PlayerEntitySyncPacket(player.getId(), this.invisibleParts).sendPacket(entityId, player, PlayerLookup.tracking(player));
+        if (!((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayer)) return;
+        HideBodyPartsNetworkingUtil.sendPlayerEntitySyncToTracking(serverPlayer, this.invisibleParts);
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))

@@ -1,9 +1,6 @@
 package net.shirojr.hidebodyparts.init;
 
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterials;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.hidebodyparts.HideBodyParts;

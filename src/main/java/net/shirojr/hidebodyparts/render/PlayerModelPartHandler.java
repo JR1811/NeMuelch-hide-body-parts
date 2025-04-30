@@ -2,7 +2,7 @@ package net.shirojr.hidebodyparts.render;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.entity.player.PlayerModelPart;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import net.shirojr.hidebodyparts.util.BodyPart;
 
 import java.util.HashSet;
@@ -17,7 +17,7 @@ public class PlayerModelPartHandler {
         for (BodyPart entry : invisibleParts) {
             for (PlayerModelPart secondLayerEntry : entry.getSecondLayer()) {
                 if (!options.isPlayerModelPartEnabled(secondLayerEntry)) continue;
-                options.setPlayerModelPart(secondLayerEntry, false);
+                options.togglePlayerModelPart(secondLayerEntry, false);
             }
         }
 

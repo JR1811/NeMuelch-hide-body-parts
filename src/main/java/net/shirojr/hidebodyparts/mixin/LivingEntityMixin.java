@@ -10,6 +10,7 @@ import net.shirojr.hidebodyparts.util.BodyPart;
 import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -35,31 +36,34 @@ public abstract class LivingEntityMixin {
         HashSet<BodyPart> hiddenParts = saver.hidebodyparts$getInvisibleParts();
 
         if (oldStack.getItem() instanceof BodyPartHider hider) {
-            if (equipmentSlot.getType().equals(EquipmentSlot.Type.HUMANOID_ARMOR)) {
+            if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
                 Predicate<BodyPart> wearingPartsPredicate = bodyPart -> hider.hideOnWearing(entity, equipmentSlot).contains(bodyPart);
                 if (hiddenParts.stream().anyMatch(wearingPartsPredicate)) {
                     saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnWearing(entity, equipmentSlot)));
                 }
             } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
-                Hand hand = equipmentSlot.equals(EquipmentSlot.OFFHAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
-                Predicate<BodyPart> holdingPartsPredicate = bodyPart -> hider.hideOnHolding(entity, hand).contains(bodyPart);
+                Predicate<BodyPart> holdingPartsPredicate = bodyPart -> hider.hideOnHolding(entity, getHand(equipmentSlot)).contains(bodyPart);
                 if (hiddenParts.stream().anyMatch(holdingPartsPredicate)) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnHolding(entity, hand)));
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnHolding(entity, getHand(equipmentSlot))));
                 }
             }
         }
 
         if (newStack.getItem() instanceof BodyPartHider hider) {
-            if (equipmentSlot.getType().equals(EquipmentSlot.Type.HUMANOID_ARMOR)) {
+            if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
                 if (!hiddenParts.containsAll(hider.hideOnWearing(entity, equipmentSlot))) {
                     saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnWearing(entity, equipmentSlot)));
                 }
             } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
-                Hand hand = equipmentSlot.equals(EquipmentSlot.OFFHAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
-                if (!hiddenParts.containsAll(hider.hideOnHolding(entity, hand))) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnHolding(entity, hand)));
+                if (!hiddenParts.containsAll(hider.hideOnHolding(entity, getHand(equipmentSlot)))) {
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnHolding(entity, getHand(equipmentSlot))));
                 }
             }
         }
+    }
+
+    @Unique
+    private Hand getHand(EquipmentSlot slot) {
+        return slot.equals(EquipmentSlot.OFFHAND) ? Hand.OFF_HAND : Hand.MAIN_HAND;
     }
 }

@@ -5,7 +5,6 @@ import net.minecraft.util.Identifier;
 import net.shirojr.hidebodyparts.event.HideBodyPartsEvents;
 import net.shirojr.hidebodyparts.init.HideBodyPartsItemGroups;
 import net.shirojr.hidebodyparts.init.HideBodyPartsItems;
-import net.shirojr.hidebodyparts.network.HideBodyPartsPayloads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +18,6 @@ public class HideBodyParts implements ModInitializer {
         HideBodyPartsItems.initialize();
         HideBodyPartsItemGroups.initialize();
         HideBodyPartsEvents.registerEvents();
-        HideBodyPartsPayloads.initialize();
 
         LOGGER.info("Ooops, there goes my spleen...");
     }
