@@ -57,20 +57,20 @@ public class HideBodyPartsCommand {
             if (!invisibleParts.remove(selectedPart)) {
                 invisibleParts.add(selectedPart);
             }
-        });
+        }, true);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int runRemoveAllEntries(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
-        targetPlayer.hidebodyparts$modifyInvisibleParts(HashSet::clear);
+        targetPlayer.hidebodyparts$modifyInvisibleParts(HashSet::clear, true);
         context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.removed.all"), true);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int runEnableAllEntries(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
-        targetPlayer.hidebodyparts$modifyInvisibleParts(bodyParts -> bodyParts.addAll(Set.of(BodyPart.values())));
+        targetPlayer.hidebodyparts$modifyInvisibleParts(bodyParts -> bodyParts.addAll(Set.of(BodyPart.values())), true);
         context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.added.all"), true);
         return Command.SINGLE_SUCCESS;
     }

@@ -39,12 +39,12 @@ public abstract class LivingEntityMixin {
             if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
                 Predicate<BodyPart> wearingPartsPredicate = bodyPart -> hider.hideOnWearing(entity, equipmentSlot).contains(bodyPart);
                 if (hiddenParts.stream().anyMatch(wearingPartsPredicate)) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnWearing(entity, equipmentSlot)));
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnWearing(entity, equipmentSlot)), true);
                 }
             } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
                 Predicate<BodyPart> holdingPartsPredicate = bodyPart -> hider.hideOnHolding(entity, getHand(equipmentSlot)).contains(bodyPart);
                 if (hiddenParts.stream().anyMatch(holdingPartsPredicate)) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnHolding(entity, getHand(equipmentSlot))));
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnHolding(entity, getHand(equipmentSlot))), true);
                 }
             }
         }
@@ -52,11 +52,11 @@ public abstract class LivingEntityMixin {
         if (newStack.getItem() instanceof BodyPartHider hider) {
             if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
                 if (!hiddenParts.containsAll(hider.hideOnWearing(entity, equipmentSlot))) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnWearing(entity, equipmentSlot)));
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnWearing(entity, equipmentSlot)), true);
                 }
             } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
                 if (!hiddenParts.containsAll(hider.hideOnHolding(entity, getHand(equipmentSlot)))) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnHolding(entity, getHand(equipmentSlot))));
+                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnHolding(entity, getHand(equipmentSlot))), true);
                 }
             }
         }

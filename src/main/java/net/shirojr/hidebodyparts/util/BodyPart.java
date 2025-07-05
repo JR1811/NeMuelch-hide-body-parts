@@ -69,7 +69,7 @@ public enum BodyPart implements StringIdentifiable {
         HashSet<BodyPart> set = new HashSet<>();
         int size = buf.readVarInt();
         for (int i = 0; i < size; i++) {
-            BodyPart part = fromName(buf.readString());
+            BodyPart part = BodyPart.values()[buf.readByte()];
             if (part == null) continue;
             set.add(part);
         }
@@ -79,7 +79,7 @@ public enum BodyPart implements StringIdentifiable {
     public static void toPacketByteBuf(HashSet<BodyPart> parts, PacketByteBuf buf) {
         buf.writeVarInt(parts.size());
         for (BodyPart part : parts) {
-            buf.writeString(part.asString());
+            buf.writeByte(part.ordinal());
         }
     }
 }

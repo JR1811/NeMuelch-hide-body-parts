@@ -14,13 +14,12 @@ public class PlayerUpdateEvents {
         newParts.hidebodyparts$modifyInvisibleParts(bodyParts -> {
             bodyParts.clear();
             bodyParts.addAll(oldParts.hidebodyparts$getInvisibleParts());
-        });
+        }, true);
     }
 
     public static void registerPlayerJoin(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
         ServerPlayerEntity player = handler.getPlayer();
         if (!(player instanceof BodyPartSaver bodyPartSaver)) return;
-        HideBodyPartsNetworkingUtil.sendPlayerEntitySyncToTracking(player, bodyPartSaver.hidebodyparts$getInvisibleParts());
-        player.getArmorItems();
+        HideBodyPartsNetworkingUtil.sendPlayerEntitySync(player, bodyPartSaver.hidebodyparts$getInvisibleParts(), true);
     }
 }

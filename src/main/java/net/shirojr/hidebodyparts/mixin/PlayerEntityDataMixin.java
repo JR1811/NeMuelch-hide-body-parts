@@ -36,28 +36,33 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements Body
         super(entityType, world);
     }
 
-    @Override
-    public HashSet<BodyPart> hidebodyparts$getInvisibleParts() {
-        return new HashSet<>(this.invisibleParts);
+    @Unique
+    private HashSet<BodyPart> getInvisibleParts() {
+        return this.invisibleParts;
     }
 
     @Override
-    public void hidebodyparts$modifyInvisibleParts(Consumer<HashSet<BodyPart>> consumer) {
-        consumer.accept(this.invisibleParts);
+    public HashSet<BodyPart> hidebodyparts$getInvisibleParts() {
+        return new HashSet<>(this.getInvisibleParts());
+    }
+
+    @Override
+    public void hidebodyparts$modifyInvisibleParts(Consumer<HashSet<BodyPart>> consumer, boolean syncToOwnClient) {
+        consumer.accept(this.getInvisibleParts());
         PlayerEntity player = (PlayerEntity) (Object) this;
         if (!(player instanceof ServerPlayerEntity serverPlayer)) {
-            PlayerModelPartHandler.setSecondLayerState(this.invisibleParts);
+            PlayerModelPartHandler.setSecondLayerState(this.getInvisibleParts());
         } else {
-            HideBodyPartsNetworkingUtil.sendPlayerEntitySyncToTracking(serverPlayer, this.invisibleParts);
+            HideBodyPartsNetworkingUtil.sendPlayerEntitySync(serverPlayer, this.getInvisibleParts(), syncToOwnClient);
         }
     }
 
     @Override
-    public void hidebodyparts$modifyInvisiblePartsForNewEntity(int entityId, Consumer<HashSet<BodyPart>> consumer) {
+    public void hidebodyparts$modifyInvisiblePartsForNewEntity(int entityId, Consumer<HashSet<BodyPart>> consumer, boolean syncToOwnClient) {
         //FIXME: unused
-        consumer.accept(this.invisibleParts);
+        consumer.accept(this.getInvisibleParts());
         if (!((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayer)) return;
-        HideBodyPartsNetworkingUtil.sendPlayerEntitySyncToTracking(serverPlayer, this.invisibleParts);
+        HideBodyPartsNetworkingUtil.sendPlayerEntitySync(serverPlayer, this.getInvisibleParts(), syncToOwnClient);
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
@@ -71,15 +76,13 @@ public abstract class PlayerEntityDataMixin extends LivingEntity implements Body
 
     @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
     protected void hidebodyparts$injectCustomReadNbt(NbtCompound nbt, CallbackInfo ci) {
-        NbtList bodyPartList = nbt.getList("invisibleParts", NbtElement.STRING_TYPE);
-        HashSet<BodyPart> set = new HashSet<>();
-        bodyPartList.forEach(nbtElement -> {
+        NbtList bodyPartNbtList = nbt.getList("invisibleParts", NbtElement.STRING_TYPE);
+        HashSet<BodyPart> parts = new HashSet<>();
+        bodyPartNbtList.forEach(nbtElement -> {
             BodyPart part = BodyPart.fromName(nbtElement.asString());
-            if (part != null) set.add(part);
+            if (part != null) parts.add(part);
         });
-        hidebodyparts$modifyInvisibleParts(bodyParts -> {
-            bodyParts.clear();
-            bodyParts.addAll(set);
-        });
+        getInvisibleParts().clear();
+        getInvisibleParts().addAll(parts);
     }
 }
