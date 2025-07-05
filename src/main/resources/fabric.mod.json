@@ -9,8 +9,8 @@
 		"DEV - 0xJoeMama"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/JR1811",
+		"sources": "https://github.com/JR1811/NeMuelch-hide-body-parts"
 	},
 	"license": "MIT",
 	"icon": "assets/hide-body-parts/icon.png",
@@ -21,6 +21,9 @@
 		],
 		"client": [
 			"net.shirojr.hidebodyparts.HideBodyPartsClient"
+		],
+		"cardinal-components-entity": [
+			"net.shirojr.hidebodyparts.cca.HideBodyPartsComponents"
 		]
 	},
 	"mixins": [
@@ -32,5 +35,10 @@
 		"minecraft": "~1.20.0",
 		"java": ">=17",
 		"fabric-api": "*"
+	},
+	"custom": {
+		"cardinal-components": [
+			"hide-body-parts:hidden_parts"
+		]
 	}
 }
