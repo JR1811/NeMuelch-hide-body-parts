@@ -15,18 +15,23 @@ import java.util.function.Consumer;
 public interface BodyPartComponent extends Component {
     Identifier KEY = HideBodyParts.getId("hidden_parts");
 
+    /**
+     * @return <code>null</code>, if the entity can't hide body parts
+     */
     @Nullable
-    default BodyPartComponent fromEntity(Entity entity) {
+    static BodyPartComponent fromEntity(Entity entity) {
         if (!(entity instanceof PlayerEntity player)) return null;
         return HideBodyPartsComponents.ACCESSORIES.get(player);
     }
 
+    @SuppressWarnings("unused")
     PlayerEntity getPlayer();
 
     HashSet<BodyPart> getHiddenBodyParts();
 
-    void modifyHiddenBodyParts(Consumer<HashSet<BodyPart>>bodyPartsConsumer, boolean sync);
+    void modifyHiddenBodyParts(Consumer<HashSet<BodyPart>> bodyPartsConsumer, boolean sync);
 
+    @SuppressWarnings("unused")
     default boolean isHidden(BodyPart part) {
         return getHiddenBodyParts().contains(part);
     }

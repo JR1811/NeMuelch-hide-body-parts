@@ -8,8 +8,8 @@ import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
+import net.shirojr.hidebodyparts.cca.components.BodyPartComponent;
 import net.shirojr.hidebodyparts.util.BodyPart;
-import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,8 +17,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.HashSet;
 
 @Mixin(HeldItemRenderer.class)
 public abstract class HeldItemRendererMixin {
@@ -45,11 +43,12 @@ public abstract class HeldItemRendererMixin {
     private boolean disabledEntry(Arm arm) {
         ClientPlayerEntity clientPlayer = client.player;
         if (clientPlayer == null) return false;
-        HashSet<BodyPart> invisibleParts = ((BodyPartSaver) clientPlayer).hidebodyparts$getInvisibleParts();
+        BodyPartComponent target = BodyPartComponent.fromEntity(clientPlayer);
+        if (target == null) return false;
 
-        if (arm.equals(Arm.LEFT) && invisibleParts.contains(BodyPart.LEFT_ARM)) {
+        if (arm.equals(Arm.LEFT) && target.getHiddenBodyParts().contains(BodyPart.LEFT_ARM)) {
             return true;
         }
-        return arm.equals(Arm.RIGHT) && invisibleParts.contains(BodyPart.RIGHT_ARM);
+        return arm.equals(Arm.RIGHT) && target.getHiddenBodyParts().contains(BodyPart.RIGHT_ARM);
     }
 }

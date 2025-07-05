@@ -6,8 +6,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.shirojr.hidebodyparts.api.BodyPartHider;
+import net.shirojr.hidebodyparts.cca.components.BodyPartComponent;
 import net.shirojr.hidebodyparts.util.BodyPart;
-import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,7 +21,6 @@ import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @Shadow
     public abstract boolean areItemsDifferent(ItemStack stack, ItemStack stack2);
 
@@ -31,20 +30,21 @@ public abstract class LivingEntityMixin {
                                                      @Local(ordinal = 0) ItemStack oldStack, @Local(ordinal = 1) ItemStack newStack) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity.getWorld().isClient()) return;
-        if (!(entity instanceof BodyPartSaver saver)) return;
+        BodyPartComponent target = BodyPartComponent.fromEntity(entity);
+        if (target == null) return;
         if (!areItemsDifferent(oldStack, newStack)) return;
-        HashSet<BodyPart> hiddenParts = saver.hidebodyparts$getInvisibleParts();
+        HashSet<BodyPart> hiddenParts = target.getHiddenBodyParts();
 
         if (oldStack.getItem() instanceof BodyPartHider hider) {
             if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
                 Predicate<BodyPart> wearingPartsPredicate = bodyPart -> hider.hideOnWearing(entity, equipmentSlot).contains(bodyPart);
                 if (hiddenParts.stream().anyMatch(wearingPartsPredicate)) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnWearing(entity, equipmentSlot)), true);
+                    target.modifyHiddenBodyParts(parts -> parts.removeAll(hider.hideOnWearing(entity, equipmentSlot)), true);
                 }
             } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
                 Predicate<BodyPart> holdingPartsPredicate = bodyPart -> hider.hideOnHolding(entity, getHand(equipmentSlot)).contains(bodyPart);
                 if (hiddenParts.stream().anyMatch(holdingPartsPredicate)) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.removeAll(hider.hideOnHolding(entity, getHand(equipmentSlot))), true);
+                    target.modifyHiddenBodyParts(parts -> parts.removeAll(hider.hideOnHolding(entity, getHand(equipmentSlot))), true);
                 }
             }
         }
@@ -52,11 +52,11 @@ public abstract class LivingEntityMixin {
         if (newStack.getItem() instanceof BodyPartHider hider) {
             if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
                 if (!hiddenParts.containsAll(hider.hideOnWearing(entity, equipmentSlot))) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnWearing(entity, equipmentSlot)), true);
+                    target.modifyHiddenBodyParts(parts -> parts.addAll(hider.hideOnWearing(entity, equipmentSlot)), true);
                 }
             } else if (equipmentSlot.getType().equals(EquipmentSlot.Type.HAND)) {
                 if (!hiddenParts.containsAll(hider.hideOnHolding(entity, getHand(equipmentSlot)))) {
-                    saver.hidebodyparts$modifyInvisibleParts(parts -> parts.addAll(hider.hideOnHolding(entity, getHand(equipmentSlot))), true);
+                    target.modifyHiddenBodyParts(parts -> parts.addAll(hider.hideOnHolding(entity, getHand(equipmentSlot))), true);
                 }
             }
         }

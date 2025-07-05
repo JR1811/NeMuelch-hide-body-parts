@@ -11,7 +11,7 @@ import java.util.List;
  * Dynamic Body Part hiding interface for custom items.<br>
  * This only applies for {@link net.minecraft.entity.player.PlayerEntity PlayerEntities}.
  *
- * @see net.shirojr.hidebodyparts.mixin.PlayerEntityDataMixin PlayerEntityDataMixin
+ * @see net.shirojr.hidebodyparts.cca.components.BodyPartComponent BodyPartComponent (CCA)
  */
 @SuppressWarnings("unused")
 public interface BodyPartHider {

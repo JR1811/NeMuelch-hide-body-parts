@@ -33,7 +33,8 @@ public class HiddenBodyPartsImpl implements BodyPartComponent, AutoSyncedCompone
     public void modifyHiddenBodyParts(Consumer<HashSet<BodyPart>> bodyPartsConsumer, boolean sync) {
         HashSet<BodyPart> oldSet = new HashSet<>(this.hiddenParts);
         bodyPartsConsumer.accept(this.hiddenParts);
-        if (!sync || oldSet.equals(getHiddenBodyParts())) return;
+        if (oldSet.equals(getHiddenBodyParts())) return;
+        if (!sync) return;
         HideBodyPartsComponents.ACCESSORIES.sync(this.player);
     }
 

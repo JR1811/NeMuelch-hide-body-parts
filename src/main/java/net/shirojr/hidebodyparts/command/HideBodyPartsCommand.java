@@ -11,8 +11,8 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.shirojr.hidebodyparts.cca.components.BodyPartComponent;
 import net.shirojr.hidebodyparts.util.BodyPart;
-import net.shirojr.hidebodyparts.util.cast.BodyPartSaver;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +24,10 @@ public class HideBodyPartsCommand {
 
     private static final SimpleCommandExceptionType INVALID_PART =
             new SimpleCommandExceptionType(Text.literal("Body Part not found"));
+    private static final SimpleCommandExceptionType INVALID_HOLDER =
+            new SimpleCommandExceptionType(Text.literal("Entity can't hide Body Parts"));
 
+    @SuppressWarnings("unused")
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(literal("hide").requires(source -> source.hasPermissionLevel(2))
                 .then(literal("bodyPart")
@@ -51,9 +54,12 @@ public class HideBodyPartsCommand {
         String bodyPartInput = StringArgumentType.getString(context, "bodyPartName");
         BodyPart selectedPart = BodyPart.fromName(bodyPartInput);
         if (selectedPart == null) throw INVALID_PART.create();
-        BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
+        BodyPartComponent target = BodyPartComponent.fromEntity(EntityArgumentType.getPlayer(context, "target"));
+        if (target == null) {
+            throw INVALID_HOLDER.create();
+        }
 
-        targetPlayer.hidebodyparts$modifyInvisibleParts(invisibleParts -> {
+        target.modifyHiddenBodyParts(invisibleParts -> {
             if (!invisibleParts.remove(selectedPart)) {
                 invisibleParts.add(selectedPart);
             }
@@ -62,15 +68,21 @@ public class HideBodyPartsCommand {
     }
 
     private static int runRemoveAllEntries(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
-        targetPlayer.hidebodyparts$modifyInvisibleParts(HashSet::clear, true);
+        BodyPartComponent target = BodyPartComponent.fromEntity(EntityArgumentType.getPlayer(context, "target"));
+        if (target == null) {
+            throw INVALID_HOLDER.create();
+        }
+        target.modifyHiddenBodyParts(HashSet::clear, true);
         context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.removed.all"), true);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int runEnableAllEntries(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        BodyPartSaver targetPlayer = (BodyPartSaver) EntityArgumentType.getPlayer(context, "target");
-        targetPlayer.hidebodyparts$modifyInvisibleParts(bodyParts -> bodyParts.addAll(Set.of(BodyPart.values())), true);
+        BodyPartComponent target = BodyPartComponent.fromEntity(EntityArgumentType.getPlayer(context, "target"));
+        if (target == null) {
+            throw INVALID_HOLDER.create();
+        }
+        target.modifyHiddenBodyParts(bodyParts -> bodyParts.addAll(Set.of(BodyPart.values())), true);
         context.getSource().sendFeedback(() -> Text.translatable("feedback.bodypart.added.all"), true);
         return Command.SINGLE_SUCCESS;
     }
