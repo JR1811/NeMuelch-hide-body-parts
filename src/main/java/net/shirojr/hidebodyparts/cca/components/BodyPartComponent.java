@@ -1,6 +1,5 @@
 package net.shirojr.hidebodyparts.cca.components;
 
-import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -8,6 +7,7 @@ import net.shirojr.hidebodyparts.HideBodyParts;
 import net.shirojr.hidebodyparts.cca.HideBodyPartsComponents;
 import net.shirojr.hidebodyparts.util.BodyPart;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.cca.api.v3.component.Component;
 
 import java.util.HashSet;
 import java.util.function.Consumer;

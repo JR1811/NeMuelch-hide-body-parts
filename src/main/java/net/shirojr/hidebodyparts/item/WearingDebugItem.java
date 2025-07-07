@@ -4,13 +4,14 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.hidebodyparts.api.BodyPartHider;
 import net.shirojr.hidebodyparts.util.BodyPart;
 
 import java.util.List;
 
 public class WearingDebugItem extends ArmorItem implements BodyPartHider {
-    public WearingDebugItem(ArmorMaterial material, Type type, Settings settings) {
+    public WearingDebugItem(RegistryEntry<ArmorMaterial> material, Type type, Settings settings) {
         super(material, type, settings);
     }
 

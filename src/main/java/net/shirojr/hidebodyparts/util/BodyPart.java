@@ -1,6 +1,6 @@
 package net.shirojr.hidebodyparts.util;
 
-import net.minecraft.client.render.entity.PlayerModelPart;
+import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -65,6 +65,7 @@ public enum BodyPart implements StringIdentifiable {
         nbt.put("bodyParts", list);
     }
 
+    @SuppressWarnings("unused")
     public static HashSet<BodyPart> fromPacketByteBuf(PacketByteBuf buf) {
         HashSet<BodyPart> set = new HashSet<>();
         int size = buf.readVarInt();
@@ -76,6 +77,7 @@ public enum BodyPart implements StringIdentifiable {
         return set;
     }
 
+    @SuppressWarnings("unused")
     public static void toPacketByteBuf(HashSet<BodyPart> parts, PacketByteBuf buf) {
         buf.writeVarInt(parts.size());
         for (BodyPart part : parts) {

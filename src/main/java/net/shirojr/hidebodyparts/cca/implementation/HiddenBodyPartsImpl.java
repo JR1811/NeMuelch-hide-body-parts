@@ -1,11 +1,12 @@
 package net.shirojr.hidebodyparts.cca.implementation;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.shirojr.hidebodyparts.cca.HideBodyPartsComponents;
 import net.shirojr.hidebodyparts.cca.components.BodyPartComponent;
 import net.shirojr.hidebodyparts.util.BodyPart;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import java.util.HashSet;
 import java.util.function.Consumer;
@@ -39,7 +40,7 @@ public class HiddenBodyPartsImpl implements BodyPartComponent, AutoSyncedCompone
     }
 
     @Override
-    public void readFromNbt(NbtCompound nbt) {
+    public void readFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
         modifyHiddenBodyParts(parts -> {
             parts.clear();
             parts.addAll(BodyPart.fromNbt(nbt));
@@ -47,12 +48,14 @@ public class HiddenBodyPartsImpl implements BodyPartComponent, AutoSyncedCompone
     }
 
     @Override
-    public void writeToNbt(NbtCompound nbt) {
+    public void writeToNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
         BodyPart.toNbt(this.hiddenParts, nbt);
     }
 
     @SuppressWarnings("unused")
-    public static void onRespawn(HiddenBodyPartsImpl from, HiddenBodyPartsImpl to, boolean lossless, boolean keepInventory, boolean sameCharacter) {
+    public static void onRespawn(HiddenBodyPartsImpl from, HiddenBodyPartsImpl to,
+                                 RegistryWrapper.WrapperLookup registryLookup, boolean lossless, boolean keepInventory,
+                                 boolean sameCharacter) {
         to.modifyHiddenBodyParts(parts -> {
             parts.clear();
             parts.addAll(from.hiddenParts);

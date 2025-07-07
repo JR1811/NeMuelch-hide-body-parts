@@ -36,7 +36,7 @@ public abstract class LivingEntityMixin {
         HashSet<BodyPart> hiddenParts = target.getHiddenBodyParts();
 
         if (oldStack.getItem() instanceof BodyPartHider hider) {
-            if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
+            if (equipmentSlot.getType().equals(EquipmentSlot.Type.HUMANOID_ARMOR)) {
                 Predicate<BodyPart> wearingPartsPredicate = bodyPart -> hider.hideOnWearing(entity, equipmentSlot).contains(bodyPart);
                 if (hiddenParts.stream().anyMatch(wearingPartsPredicate)) {
                     target.modifyHiddenBodyParts(parts -> parts.removeAll(hider.hideOnWearing(entity, equipmentSlot)), true);
@@ -50,7 +50,7 @@ public abstract class LivingEntityMixin {
         }
 
         if (newStack.getItem() instanceof BodyPartHider hider) {
-            if (equipmentSlot.getType().equals(EquipmentSlot.Type.ARMOR)) {
+            if (equipmentSlot.getType().equals(EquipmentSlot.Type.HUMANOID_ARMOR)) {
                 if (!hiddenParts.containsAll(hider.hideOnWearing(entity, equipmentSlot))) {
                     target.modifyHiddenBodyParts(parts -> parts.addAll(hider.hideOnWearing(entity, equipmentSlot)), true);
                 }

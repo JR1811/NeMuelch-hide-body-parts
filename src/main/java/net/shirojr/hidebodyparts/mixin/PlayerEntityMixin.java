@@ -1,9 +1,9 @@
 package net.shirojr.hidebodyparts.mixin;
 
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.world.World;
 import net.shirojr.hidebodyparts.cca.components.BodyPartComponent;
 import net.shirojr.hidebodyparts.util.BodyPart;
