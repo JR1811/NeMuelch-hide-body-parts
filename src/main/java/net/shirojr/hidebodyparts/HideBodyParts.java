@@ -3,6 +3,7 @@ package net.shirojr.hidebodyparts;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import net.shirojr.hidebodyparts.init.HideBodyPartsCommonEvents;
+import net.shirojr.hidebodyparts.init.HideBodyPartsEnchantments;
 import net.shirojr.hidebodyparts.init.HideBodyPartsItemGroups;
 import net.shirojr.hidebodyparts.init.HideBodyPartsItems;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ public class HideBodyParts implements ModInitializer {
         HideBodyPartsItems.initialize();
         HideBodyPartsItemGroups.initialize();
         HideBodyPartsCommonEvents.initialize();
+        HideBodyPartsEnchantments.initialize();
 
         LOGGER.info("Ooops, there goes the spleen...");
     }

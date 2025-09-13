@@ -2,11 +2,11 @@
 
 Utility mod for Fabric Minecraft.
 
-## Usage
+## Invisible Body Parts
 
-Use the `invisibleParts` NBT compound list on a player entity to hide their body parts.
+Use the `cardinal_components.hide-body-parts:hidden_parts` NBT compound list on a player entity to hide their body parts.
 
-Currently availble Bodyparts:
+Currently available Body Parts:
 
 | Body Part | name |
 |---|---|
@@ -24,7 +24,18 @@ Toggle body parts: `/hide bodyPart changeEntry bodyPartName target`
 Reset all body parts to visible: `/hide bodyPart removeAllEntries target`
 
 Still need an example of how the NBT is structured in-game? Use the previously mentioned commands to disable a body part and use minecraft's
-`/data get entity @p invisibleParts` command to inspect the listed nbt values of the disabled body parts.
+`/data get entity @p cardinal_components.hide-body-parts:hidden_parts` command to inspect the listed nbt values of the disabled body parts.
+
+## Invisible Armor
+
+Prevent armor rendering with the new
+
+- Invisible Armor Enchantment
+- `invisible_armor` Item Tag
+- custom Boolean NBT value on the ItemStack, called `InvisibleArmor`
+
+Note, that this is only a very basic implementation. External Mods, which don't make use of Minecraft's Armor Rendering,
+might not work in this case.
 
 <div style="text-align: center;">
 <br>

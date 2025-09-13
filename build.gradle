@@ -43,6 +43,7 @@ tasks.withType(JavaCompile).configureEach {
 
 java {
     withSourcesJar()
+    withJavadocJar()
 
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -60,6 +61,8 @@ publishing {
         create("mavenJava", MavenPublication) {
             artifactId = project.archives_base_name
             from components.java
+
+            artifact sourcesJar
         }
     }
 

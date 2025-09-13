@@ -8,5 +8,8 @@
   "itemgroup.hide_body_parts.hide_body_parts": "Hide Body Parts",
 
   "item.hide_body_parts.holding_debug": "Holding Debug Item",
-  "item.hide_body_parts.wearing_debug": "Wearing Debug Item"
+  "item.hide_body_parts.wearing_debug": "Wearing Debug Item",
+
+  "enchantment.hide-body-parts.invisible_armor": "Invisible Armor"
+
 }
