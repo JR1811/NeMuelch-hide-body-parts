@@ -29,7 +29,7 @@ public interface BodyPartComponent extends Component {
 
     HashSet<BodyPart> getHiddenBodyParts();
 
-    void modifyHiddenBodyParts(Consumer<HashSet<BodyPart>> bodyPartsConsumer, boolean sync);
+    boolean modifyHiddenBodyParts(Consumer<HashSet<BodyPart>> bodyPartsConsumer, boolean sync);
 
     @SuppressWarnings("unused")
     default boolean isHidden(BodyPart part) {

@@ -24,6 +24,9 @@
 		],
 		"cardinal-components-entity": [
 			"net.shirojr.hidebodyparts.cca.HideBodyPartsComponents"
+		],
+		"cardinal-components-scoreboard": [
+			"net.shirojr.hidebodyparts.cca.HideBodyPartsComponents"
 		]
 	},
 	"mixins": [
@@ -35,11 +38,13 @@
 		"java": ">=17",
 		"fabric-api": "*",
 		"cardinal-components-base": "^5.2.3",
-		"cardinal-components-entity": "^5.2.3"
+		"cardinal-components-entity": "^5.2.3",
+		"cardinal-components-scoreboard": "^5.2.3"
 	},
 	"custom": {
 		"cardinal-components": [
-			"hide-body-parts:hidden_parts"
+			"hide-body-parts:hidden_parts",
+			"hide-body-parts:request"
 		]
 	}
 }

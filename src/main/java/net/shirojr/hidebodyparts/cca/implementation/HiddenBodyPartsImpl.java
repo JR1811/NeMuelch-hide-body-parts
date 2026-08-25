@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.shirojr.hidebodyparts.cca.HideBodyPartsComponents;
 import net.shirojr.hidebodyparts.cca.components.BodyPartComponent;
+import net.shirojr.hidebodyparts.event.custom.BodyPartCallbacks;
 import net.shirojr.hidebodyparts.util.BodyPart;
 
 import java.util.HashSet;
@@ -30,12 +31,23 @@ public class HiddenBodyPartsImpl implements BodyPartComponent, AutoSyncedCompone
     }
 
     @Override
-    public void modifyHiddenBodyParts(Consumer<HashSet<BodyPart>> bodyPartsConsumer, boolean sync) {
+    public boolean modifyHiddenBodyParts(Consumer<HashSet<BodyPart>> bodyPartsConsumer, boolean sync) {
         HashSet<BodyPart> oldSet = new HashSet<>(this.hiddenParts);
         bodyPartsConsumer.accept(this.hiddenParts);
-        if (oldSet.equals(getHiddenBodyParts())) return;
-        if (!sync) return;
-        HideBodyPartsComponents.ACCESSORIES.sync(this.player);
+        if (oldSet.equals(getHiddenBodyParts())) return false;
+
+        HashSet<BodyPart> addedParts = new HashSet<>(this.hiddenParts);
+        addedParts.removeAll(oldSet);
+        BodyPartCallbacks.BODY_PART_ADDED.invoker().onBodyPartAdded(this.player, addedParts);
+
+        HashSet<BodyPart> removedParts = new HashSet<>(oldSet);
+        removedParts.removeAll(this.hiddenParts);
+        BodyPartCallbacks.BODY_PART_REMOVED.invoker().onBodyPartRemoved(this.player, removedParts);
+
+        if (sync) {
+            HideBodyPartsComponents.ACCESSORIES.sync(this.player);
+        }
+        return true;
     }
 
     @Override

@@ -10,6 +10,11 @@
   "item.hide_body_parts.holding_debug": "Holding Debug Item",
   "item.hide_body_parts.wearing_debug": "Wearing Debug Item",
 
-  "enchantment.hide-body-parts.invisible_armor": "Invisible Armor"
+  "enchantment.hide-body-parts.invisible_armor": "Invisible Armor",
 
+  "info.hide_body_parts.request.sender": "[%s] requested Body Part change",
+  "info.hide_body_parts.request.part": "%s hidden state: %s",
+  "info.hide_body_parts.request.action": "Action: ",
+  "info.hide_body_parts.request.approve": "APPROVE",
+  "info.hide_body_parts.request.deny": "DENY"
 }
