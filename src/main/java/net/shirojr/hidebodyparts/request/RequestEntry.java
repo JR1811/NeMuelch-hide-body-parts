@@ -22,8 +22,10 @@ import java.util.UUID;
  * @param requester      user, who handed in the request
  * @param changeTarget   user, who's entries are requested to be changed
  * @param requestedParts parts to change
- * @param hidden         state of the requested parts
+ * @param hidden         visibility of the requested parts
  * @param handler        user, who changed the {@link RequestState request state}
+ * @param requestTime    time of when the request was created
+ * @param state          request entry status
  */
 public record RequestEntry(UUID requester, UUID changeTarget, HashSet<BodyPart> requestedParts, boolean hidden,
                            @Nullable UUID handler, long requestTime, RequestState state) {
